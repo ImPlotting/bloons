@@ -1,18 +1,18 @@
 import requests
-from datetime import date
+from datetime import date, timedelta
 
 def get_this_weeks_boss():
     bosses = requests.get("https://data.ninjakiwi.com/btd6/bosses").json()['body']
-    current_time = date.today()
+    today = date.today()
+    start_of_week, end_of_week = today - timedelta(today.weekday()), today + timedelta(6 - today.weekday()) #Calculating start of the week and end of the week NB monday = 0 and sunday = 6
     
     for boss in bosses:
-        start_date = date.fromtimestamp(boss['start'] / 1000)
-        end_date = date.fromtimestamp(boss['end'] / 1000)
+        boss_start, boss_end = date.fromtimestamp(boss['start'] / 1000), date.fromtimestamp(boss['end'] / 1000) #Unix timestamp in miliseconds
         
-        if start_date <= current_time <= end_date:
-            return f"This week's boss is {boss['name']}. Last day for this boss is {end_date}."
-
-    return "No boss found for this week."
+        #Ensure the boss period dosent overlap
+        if boss_start <= end_of_week and boss_end >= start_of_week:
+            return f"Week's Boss: {boss['name']} ({boss_start} to {boss_end})"
+    
+    return "No boss this week."
 
 print(get_this_weeks_boss())
-
