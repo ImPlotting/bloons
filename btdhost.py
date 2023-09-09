@@ -5,6 +5,7 @@ import requests
 app = Flask(__name__)
 
 @app.route('/')
+
 def get_this_weeks_boss():
     bosses = requests.get("https://data.ninjakiwi.com/btd6/bosses").json()['body']
     today = date.today()
@@ -13,6 +14,7 @@ def get_this_weeks_boss():
     for boss in bosses:
         boss_start, boss_end = date.fromtimestamp(boss['start'] / 1000), date.fromtimestamp(boss['end'] / 1000)
         
+        #Check if boss period overlaps
         if boss_start <= end_of_week and boss_end >= start_of_week:
             return f"Week's Boss: {boss['name']} ({boss_start} to {boss_end})"
     
