@@ -3,7 +3,7 @@ from datetime import date, timedelta
 
 def get_this_weeks_boss():
     try:
-        response = requests.get("https://data.ninjakiwi.com/btd6/bosses").json()['body']
+        response = requests.get("https://data.ninjakiwi.com/btd6/bosses")
         response.raise_for_status() #Raise HTTPError if status code was unseccessful
         bosses = response.json()['body']
         
