@@ -20,12 +20,16 @@ def get_this_weeks_boss():
             
             #Ensure the boss period dosent overlap
             if boss_start <= end_of_week and boss_end >= start_of_week:
-                return f"Week's Boss: {boss['name']} ({boss_start} to {boss_end})"
-        
+                boss_name = boss['name']
+                boss_date_range = f"{boss_start} to {boss_end}"
+                boss_image = boss['bossTypeURL']
+                return render_template('boss.html', boss_name=boss_name, boss_date_range=boss_date_range, boss_image=boss_image)
+            
         return "No boss this week."
 
     except requests.RequestException:
         return "Error fetching the boss data"
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=81)
